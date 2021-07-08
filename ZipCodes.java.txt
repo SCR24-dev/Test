@@ -1,0 +1,43 @@
+public class ZipCodes {
+    public static void main(String args[]) {
+     int[][] array = {
+         {94133, 94133},
+         { 94200, 94299 },
+         {94226, 94399}
+     };
+     ZipCodes.removeZipCodes(array);
+    }
+    public static void removeZipCodes(int[][] ranges){
+     int size = ranges.length;
+     int[][] finalZipCodes = new int[size][2];
+     int finalCounter= 0;
+     //Sorting given set ranges based on 1st number in the range
+     java.util.Arrays.sort(ranges,new java.util.Comparator<int[]>(){
+        public int compare(int[] a,int[] b){
+            return Integer.compare(a[0],b[0]);
+        }
+     });
+     //Initializing array with minimum value.
+     int prevMax = ranges[0][1];
+     finalZipCodes[finalCounter][0]=ranges[0][0];
+     finalZipCodes[finalCounter][1]= ranges[0][1];
+     finalCounter = finalCounter+1;
+     for(int i=1;i<size;i++){
+        if (ranges[i][0] < prevMax){
+	    //if there is a overlap, then replace previous range with correct max value.
+            prevMax = Math.max(ranges[i][1], prevMax);
+            finalZipCodes[finalCounter-1][1]=prevMax;
+        }else{
+	    //if there is no overlap, just add the values to array.
+            prevMax = ranges[i][1];
+            finalZipCodes[finalCounter][1]=prevMax;
+            finalZipCodes[finalCounter][0]=ranges[i][0];
+            finalCounter = finalCounter+1;
+        }
+     }
+     //Display final ranges
+     for(int i=0;i<finalCounter;i++){
+             System.out.print("["+finalZipCodes[i][0]+","+finalZipCodes[i][1]+"]");
+     }
+    }
+}
