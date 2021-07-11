@@ -1,0 +1,66 @@
+public class ZipCodes {
+    public static void main(String args[]) {
+     int[][] array = {
+         {94133, 94133},
+         { 94200, 94299 },
+         {94226, 94399}
+     };
+     ZipCodes.optimizeZipCodes(array);
+    }
+    public static void optimizeZipCodes(int[][] ranges){
+    
+     
+     //Sorting given set ranges based on 1st number in the range
+     ranges = ZipCodes.sortRanges(ranges);
+     
+     //Remove overlappings
+     ranges = ZipCodes.removeOverlaps(ranges);
+     
+     //Display final ranges
+     ZipCodes.displayRanges(ranges);
+     
+    }
+    
+    public static int[][] removeOverlaps(int[][] ranges){
+         int size = ranges.length;
+         int[][] finalZipCodes = new int[size][2];
+         int prevMax = ranges[0][1];
+         int finalCounter= 0;
+         
+         //Initializing array with minimum value.
+         finalZipCodes[finalCounter][0]=ranges[0][0];
+         finalZipCodes[finalCounter][1]= ranges[0][1];
+         
+         finalCounter = finalCounter+1;
+         
+         for(int i=1;i<size;i++){
+            if (ranges[i][0] < prevMax){
+	            //if there is a overlap, then replace previous range with correct max value.
+                prevMax = Math.max(ranges[i][1], prevMax);
+                finalZipCodes[finalCounter-1][1]=prevMax;
+            }else{
+    	        //if there is no overlap, just add the values to array.
+                prevMax = ranges[i][1];
+                finalZipCodes[finalCounter][1]=prevMax;
+                finalZipCodes[finalCounter][0]=ranges[i][0];
+               finalCounter = finalCounter+1;
+            }
+         }
+         return finalZipCodes;
+    }
+    public static void displayRanges(int[][] ranges){
+        int length = ranges.length;
+        for(int i=0;i<length && (ranges[i][0]!=0 || ranges[i][1]!=0);i++){
+             System.out.print("["+ranges[i][0]+","+ranges[i][1]+"]");
+     }
+    }
+     
+     public static int[][] sortRanges(int[][] ranges){
+         java.util.Arrays.sort(ranges,new java.util.Comparator<int[]>(){
+        public int compare(int[] a,int[] b){
+            return Integer.compare(a[0],b[0]);
+        }
+     });
+     return ranges;
+     }
+}
